@@ -1,0 +1,13 @@
+type Todo @model 
+  @key(name: "itemType", fields: ["itemType", "status"], queryField: "todosByStatus")
+  @key(name: "nameType", fields: ["nameType", "name"], queryField: "todosByName")
+  @key(name: "dateType", fields: ["dateType", "dueDate"], queryField: "todosByDueDate"){
+  id: ID!
+  name: String!
+  description: String!
+  status: String!
+  dueDate: String!
+  itemType: String!
+  nameType: String!
+  dateType: String!
+}

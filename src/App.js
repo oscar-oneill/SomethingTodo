@@ -1,25 +1,25 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react'
+import { BrowserRouter as Router, Route } from 'react-router-dom';
+import Navigation from './Components/Navigation'
+import Amplify from 'aws-amplify'
+import awsExports from "./aws-exports";
+import { withAuthenticator } from '@aws-amplify/ui-react'
+import CreateTodo from './Components/CreateTodo';
+import TodoList from './Components/TodoList';
+import EditTodo from './Components/EditTodo';
+Amplify.configure(awsExports);
 
-function App() {
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <>
+      <Navigation/>
+      <Router>
+        <Route exact path="/" component={CreateTodo}/>
+        <Route path="/items" component={TodoList}/>
+        <Route path="/item-edit/:id" component={EditTodo}/>
+      </Router>
+    </>
+  )
 }
 
-export default App;
+export default withAuthenticator(App)
