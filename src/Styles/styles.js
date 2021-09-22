@@ -26,6 +26,20 @@ export const styles = {
     borderRadius: 7
   },
 
+  name: { 
+    border: 'none',
+    outline: 'none',
+    backgroundColor: 'ghostwhite',
+    marginBottom: 10,
+    padding: 5,
+    fontSize: 18,
+    fontFamily: 'Founders Grotesk',
+    display: 'flex',
+    alignItems: 'center',
+    borderRadius: 7, 
+    textTransform: 'capitalize'
+  },
+
   button: { 
     backgroundColor: 'black',
     color: 'white',
@@ -69,7 +83,8 @@ export const navbar = {
 export const todo = { 
   name: { 
     fontSize: 20, 
-    fontWeight: 'bold' 
+    fontWeight: 'bold',
+    textTransform: 'capitalize'
   },
 
   description: { 

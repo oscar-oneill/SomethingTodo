@@ -1,15 +1,21 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { API, graphqlOperation } from 'aws-amplify'
 import { createTodo } from '../graphql/mutations'
 import { styles, create, banner, empty } from '../Styles/styles'
 
+import TextField from '@mui/material/TextField';
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import DatePicker from '@mui/lab/DatePicker';
+
 const CreateTodo = () => {
-    const initialState = { name: '', description: '',  status: '', dueDate: 'yyyy-mm-dd', itemType: 'Task', dateType: 'Date', nameType: 'Todo' }
+    const initialState = { name: '', description: '',  status: '', dueDate: '', itemType: 'Task', dateType: 'Date', nameType: 'Todo' }
 
     const [formState, setFormState] = useState(initialState)
     const [todos, setTodos] = useState([])
     const [task, setTask] = useState('')
     const [error, setError] = useState('')
+    const [value, setValue] = useState(null);
 
     const setInput = (key, value) => {
         setFormState({ ...formState, [key]: value })
@@ -21,6 +27,7 @@ const CreateTodo = () => {
                 const todo = { ...formState }
                 setTodos([...todos, todo])
                 setFormState(initialState)
+                setValue(null)
                 const data = await API.graphql(graphqlOperation(createTodo, {input: todo}))
                 setTask(data.data.createTodo.name)
             } catch (err) {
@@ -34,8 +41,8 @@ const CreateTodo = () => {
             <div style={styles.container}>
                 <span style={{fontSize: "30px", marginBottom: "20px"}}>Create SomethingTodo</span>
                 <input
-                    onChange={e => setInput('name', e.target.value)}
-                    style={styles.input}
+                    onChange={e => setInput('name', e.target.value.toLowerCase())}
+                    style={styles.name}
                     value={formState.name}
                     placeholder="Name"
                     required
@@ -62,20 +69,24 @@ const CreateTodo = () => {
                     <option value="Complete">Complete</option>
                 </select>
 
-                <label htmlFor="dueDate">Due Date:</label>
-                <input 
-                    type="date" 
-                    value={formState.date}
-                    onChange={(e) => {setInput('dueDate', e.target.value); console.log(e.target.value)}}
-                    style={styles.date}
-                    required
-                />
+                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                    <DatePicker
+                        label="Due Date"
+                        value={value}
+                        onChange={(newValue) => {
+                            setValue(newValue)
+                            setInput('dueDate', newValue); 
+                        }}
+                        renderInput={(params) => <TextField {...params} />}
+                    />
+                </LocalizationProvider>
+
                 <br/>
                 <button style={styles.button} onClick={addTodo}>Create Todo</button>
             </div>
 
             <div style={(task || error) ? banner : empty}>
-                {task ? `New Todo: ${task} has been created!` :  error ? "Error creating todo" : ""}
+                {task ? "You now have AnotherThingTodo!" :  error ? "Error creating todo" : ""}
             </div>
         </div>
     )
