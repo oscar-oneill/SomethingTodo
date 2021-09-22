@@ -7,7 +7,8 @@ import Divider from '@mui/material/Divider';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import AddCircleOutlineRoundedIcon from '@mui/icons-material/AddCircleOutlineRounded';
 import ViewListRoundedIcon from '@mui/icons-material/ViewListRounded';
-import ExitToAppRoundedIcon from '@mui/icons-material/ExitToAppRounded';
+import ExitToAppRoundedIcon from '@mui/icons-material/ExitToAppRounded'
+import { Auth } from 'aws-amplify';
 
 const StyledMenu = styled((props) => (
   <Menu
@@ -49,6 +50,15 @@ const StyledMenu = styled((props) => (
     },
   },
 }));
+
+const signOut = async () => {
+    try {
+        await Auth.signOut();
+        window.location.href = '/'
+    } catch (error) {
+        console.log('error signing out: ', error);
+    }
+}
 
 export default function CustomizedMenus() {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -93,7 +103,7 @@ export default function CustomizedMenus() {
           <a href="/items">View ThingsTodo</a>
         </MenuItem>
         <Divider sx={{ my: 0.5 }} />
-        <MenuItem onClick={handleClose} disableRipple>
+        <MenuItem onClick={signOut} disableRipple>
           <ExitToAppRoundedIcon />
           Logout
         </MenuItem>
